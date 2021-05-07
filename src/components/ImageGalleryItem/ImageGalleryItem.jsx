@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import styles from './ImageGalleryItem.module.scss';
 
-const ImageGalleryItem = ({ image, onImageClick }) => {
+// Компонент одного изображения
+export default function ImageGalleryItem({ image, onImageClick }) {
   const fullImage = () => onImageClick(image.largeImageURL);
 
   return (
@@ -14,7 +15,7 @@ const ImageGalleryItem = ({ image, onImageClick }) => {
       />
     </li>
   );
-};
+}
 
 ImageGalleryItem.defaultProps = {
   tags: '',
@@ -28,5 +29,3 @@ ImageGalleryItem.propTypes = {
   }),
   onImageClick: PropTypes.func.isRequired,
 };
-
-export default ImageGalleryItem;

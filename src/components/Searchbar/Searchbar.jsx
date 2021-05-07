@@ -3,14 +3,14 @@ import SearchFrom from '../SearchForm';
 
 import styles from './Searchbar.module.scss';
 
-const Searchbar = ({ onSearch }) => (
-  <header className={styles.Searchbar}>
-    <SearchFrom onSearch={onSearch} />
-  </header>
-);
+export default function Searchbar({ onSearch }) {
+  return (
+    <header className={styles.Searchbar}>
+      <SearchFrom onSearch={onSearch} />
+    </header>
+  );
+}
 
 Searchbar.propTypes = {
   onSearch: PropTypes.func.isRequired,
 };
-
-export default Searchbar;

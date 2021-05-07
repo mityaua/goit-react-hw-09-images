@@ -4,10 +4,11 @@ import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
 import Button from './components/Button';
 import Loader from './components/Loader';
-import Message from './components/Message';
+import Notice from './components/Notice';
 import Modal from './components/Modal';
 import IconButton from './components/IconButton';
 import { ReactComponent as CloseIcon } from './assets/images/icons/close.svg';
+import { ReactComponent as HomeImage } from './assets/images/icons/empty.svg';
 
 import fetchImages from './api/api-services';
 
@@ -28,7 +29,7 @@ export default function App() {
     // eslint-disable-next-line
   }, [searchQuery]);
 
-  // Принимаем с формы запрос и пишем в стейт + сбрасываем после отправки стейт
+  // Принимает с формы запрос и пишет в стейт + сбрасывает после отправки стейт
   const onChangeQuery = query => {
     setImages([]);
     setPage(1);
@@ -39,7 +40,7 @@ export default function App() {
     setError(null);
   };
 
-  // Получаем дату из фетча
+  // Получает дату из фетча
   const getImages = async () => {
     setLoading(true);
 
@@ -68,9 +69,7 @@ export default function App() {
   };
 
   // Переключение модалки
-  const toggleModal = () => {
-    setModal(prevModal => !prevModal);
-  };
+  const toggleModal = () => setModal(prevModal => !prevModal);
 
   // Скролл при клике на кнопку
   const scrollOnLoadButton = () => {
@@ -87,16 +86,13 @@ export default function App() {
       <Searchbar onSearch={onChangeQuery} />
 
       {images.length < 1 && (
-        <Message>
-          <h2>
-            The gallery is empty{' '}
-            <span role="img" aria-label="nothing face">
-              🙁
-            </span>
-          </h2>
+        <Notice>
+          <h2>The gallery is empty</h2>
+
+          <HomeImage width="200px" height="200px" className="home-image" />
 
           <p>Use search field!</p>
-        </Message>
+        </Notice>
       )}
 
       <ImageGallery images={images} onImageClick={handleGalleryItem} />
@@ -107,7 +103,7 @@ export default function App() {
         <Modal onClose={toggleModal}>
           <div className="Close-box">
             <IconButton onClick={toggleModal} aria-label="Close modal">
-              <CloseIcon width="20px" height="20px" fill="#7e7b7b" />
+              <CloseIcon width="20px" height="20px" fill="#02be6e" />
             </IconButton>
           </div>
           <img src={largeImage} alt="" className="Modal-image" />
@@ -117,13 +113,13 @@ export default function App() {
       {isLoading && <Loader />}
 
       {error && (
-        <Message>
+        <Notice>
           <h2>Oops! 😫</h2>
           <p>
             Sorry, something went wrong. Please try again, or{' '}
             <a href="/">refresh the page</a>.
           </p>
-        </Message>
+        </Notice>
       )}
     </>
   );

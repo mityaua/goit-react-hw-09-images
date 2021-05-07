@@ -1,7 +1,9 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+
 import styles from './SearchForm.module.scss';
 
+// Компонент формы поиска
 export default function SearchFrom({ onSearch }) {
   const [query, setQuery] = useState('');
 

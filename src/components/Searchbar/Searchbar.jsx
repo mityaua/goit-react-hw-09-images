@@ -3,6 +3,7 @@ import SearchFrom from '../SearchForm';
 
 import styles from './Searchbar.module.scss';
 
+// Компонент бара в хедере
 export default function Searchbar({ onSearch }) {
   return (
     <header className={styles.Searchbar}>

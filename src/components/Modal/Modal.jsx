@@ -6,6 +6,7 @@ import styles from './Modal.module.scss';
 
 const modalRoot = document.querySelector('#modal-root');
 
+// Компонент модального окна
 export default function Modal({ children, onClose }) {
   // Вешает слушатели (mount)
   useEffect(() => {

@@ -17,3 +17,17 @@
   max-width: 100vw;
   max-height: 100vw;
 }
+
+:global(.Close-container) {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+
+  border-radius: 50%;
+}
+
+:global(.Modal-image) {
+  width: auto;
+  height: auto;
+  max-height: 100vh;
+}

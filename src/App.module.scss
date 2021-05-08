@@ -20,37 +20,12 @@ img {
   height: auto;
 }
 
-/*
- * Стили компонента App
- */
-.App {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 16px;
-  padding-bottom: 24px;
-}
-
-:global(.home-image) {
+// Изображение на главной странице
+.image {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
-:global(.Close-box) {
-  position: absolute;
-  top: 20px;
-  right: 40px;
-
-  padding: 10px;
-  border-radius: 50%;
-
-  background-color: rgb(255, 228, 196, 0.5);
-}
-
-:global(.Modal-image) {
-  width: auto;
-  height: auto;
-  max-height: 100vh;
-}
-
+// Анимация для изображения
 @keyframes shake {
   10%,
   90% {

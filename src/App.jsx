@@ -12,6 +12,9 @@ import { ReactComponent as HomeImage } from './assets/images/icons/empty.svg';
 
 import fetchImages from './api/api-services';
 
+import styles from './App.module.scss';
+
+// Компонент приложения
 export default function App() {
   const [images, setImages] = useState([]);
   const [currentPage, setPage] = useState(1);
@@ -20,6 +23,28 @@ export default function App() {
   const [showModal, setModal] = useState(false);
   const [largeImage, setlargeImage] = useState('');
   const [error, setError] = useState(null);
+
+  // Получает дату из фетча
+  const getImages = async () => {
+    setLoading(true);
+
+    try {
+      const { hits } = await fetchImages(searchQuery, currentPage);
+
+      setImages(prev => [...prev, ...hits]);
+
+      setPage(prevPage => prevPage + 1);
+
+      if (currentPage > 1) {
+        scrollOnLoadButton();
+      }
+    } catch (error) {
+      console.log('Smth wrong with App fetch', error);
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Запрос за картинками при обновлении инпута
   useEffect(() => {
@@ -40,28 +65,6 @@ export default function App() {
     setError(null);
   };
 
-  // Получает дату из фетча
-  const getImages = async () => {
-    setLoading(true);
-
-    try {
-      const { hits } = await fetchImages(searchQuery, currentPage);
-
-      setImages(prev => [...prev, ...hits]);
-
-      setPage(prevPage => prevPage + 1);
-
-      if (currentPage !== 1) {
-        scrollOnLoadButton();
-      }
-    } catch (error) {
-      console.log('Smth wrong with App fetch', error);
-      setError({ error });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Получает полное изображение, пишет его в стейт и открывает модалку
   const handleGalleryItem = fullImageUrl => {
     setlargeImage(fullImageUrl);
@@ -73,13 +76,15 @@ export default function App() {
 
   // Скролл при клике на кнопку
   const scrollOnLoadButton = () => {
+    const { scrollTop, clientHeight } = document.documentElement;
+
     window.scrollTo({
-      top: document.documentElement.scrollHeight,
+      top: scrollTop + clientHeight,
       behavior: 'smooth',
     });
   };
 
-  const needToShowLoadMore = images.length > 0 && images.length >= 12; // Нужны доп проверки;
+  const needToShowLoadMore = images.length > 0 && images.length >= 12;
 
   return (
     <>
@@ -89,7 +94,7 @@ export default function App() {
         <Notice>
           <h2>The gallery is empty</h2>
 
-          <HomeImage width="200px" height="200px" className="home-image" />
+          <HomeImage width="200px" height="200px" className={styles.image} />
 
           <p>Use search field!</p>
         </Notice>
@@ -97,20 +102,23 @@ export default function App() {
 
       <ImageGallery images={images} onImageClick={handleGalleryItem} />
 
-      {needToShowLoadMore && <Button onClick={getImages} />}
-
       {showModal && (
         <Modal onClose={toggleModal}>
-          <div className="Close-box">
-            <IconButton onClick={toggleModal} aria-label="Close modal">
+          <div className="Close-container">
+            <IconButton onClick={toggleModal} aria-label="Close modal window">
               <CloseIcon width="20px" height="20px" fill="#02be6e" />
             </IconButton>
           </div>
+
           <img src={largeImage} alt="" className="Modal-image" />
         </Modal>
       )}
 
-      {isLoading && <Loader />}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        needToShowLoadMore && <Button onClick={getImages} />
+      )}
 
       {error && (
         <Notice>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
@@ -55,7 +55,7 @@ export default function App() {
   }, [searchQuery]);
 
   // Принимает с формы запрос и пишет в стейт + сбрасывает после отправки стейт
-  const onChangeQuery = query => {
+  const onChangeQuery = useCallback(query => {
     setImages([]);
     setPage(1);
     setQuery(query);
@@ -63,16 +63,18 @@ export default function App() {
     setModal(false);
     setlargeImage('');
     setError(null);
-  };
+  }, []);
 
   // Получает полное изображение, пишет его в стейт и открывает модалку
-  const handleGalleryItem = fullImageUrl => {
+  const handleGalleryItem = useCallback(fullImageUrl => {
     setlargeImage(fullImageUrl);
     setModal(true);
-  };
+  }, []);
 
   // Переключение модалки
-  const toggleModal = () => setModal(prevModal => !prevModal);
+  const toggleModal = useCallback(() => {
+    setModal(prevModal => !prevModal);
+  }, []);
 
   // Скролл при клике на кнопку
   const scrollOnLoadButton = () => {

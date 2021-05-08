@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createUseStyles } from 'react-jss';
 
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
-import Button from './components/Button';
+import LoadMoreButton from './components/LoadMoreButton';
 import Loader from './components/Loader';
 import Notice from './components/Notice';
 import Modal from './components/Modal';
@@ -12,10 +13,26 @@ import { ReactComponent as HomeImage } from './assets/images/icons/empty.svg';
 
 import fetchImages from './api/api-services';
 
-import styles from './App.module.scss';
+const useStyles = createUseStyles({
+  modalCloseContainer: {
+    position: 'absolute',
+    top: '20px',
+    right: '40px',
+
+    borderRadius: '50%',
+  },
+
+  modalImage: {
+    width: 'auto',
+    height: 'auto',
+    maxHeight: '100vh',
+  },
+});
 
 // Компонент приложения
 export default function App() {
+  const classes = useStyles();
+
   const [images, setImages] = useState([]);
   const [currentPage, setPage] = useState(1);
   const [searchQuery, setQuery] = useState('');
@@ -96,7 +113,7 @@ export default function App() {
         <Notice>
           <h2>The gallery is empty</h2>
 
-          <HomeImage width="200px" height="200px" className={styles.image} />
+          <HomeImage width="200px" height="200px" />
 
           <p>Use search field!</p>
         </Notice>
@@ -104,22 +121,10 @@ export default function App() {
 
       <ImageGallery images={images} onImageClick={handleGalleryItem} />
 
-      {showModal && (
-        <Modal onClose={toggleModal}>
-          <div className="Close-container">
-            <IconButton onClick={toggleModal} aria-label="Close modal window">
-              <CloseIcon width="20px" height="20px" fill="#02be6e" />
-            </IconButton>
-          </div>
-
-          <img src={largeImage} alt="" className="Modal-image" />
-        </Modal>
-      )}
-
       {isLoading ? (
         <Loader />
       ) : (
-        needToShowLoadMore && <Button onClick={getImages} />
+        needToShowLoadMore && <LoadMoreButton onClick={getImages} />
       )}
 
       {error && (
@@ -130,6 +135,18 @@ export default function App() {
             <a href="/">refresh the page</a>.
           </p>
         </Notice>
+      )}
+
+      {showModal && (
+        <Modal onClose={toggleModal}>
+          <div className={classes.modalCloseContainer}>
+            <IconButton onClick={toggleModal} aria-label="Close modal window">
+              <CloseIcon width="20px" height="20px" fill="#02be6e" />
+            </IconButton>
+          </div>
+
+          <img src={largeImage} alt="" className={classes.modalImage} />
+        </Modal>
       )}
     </>
   );
